@@ -6,7 +6,7 @@
 
 ## Introduction
 
-Islandora modules for Drupal 8.2.x
+Core Islandora module for Drupal 8.2.x.
 
 ## Maintainers
 
