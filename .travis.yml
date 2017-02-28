@@ -29,7 +29,7 @@ script:
   - phpcs --standard=Drupal --extensions=php,module,inc,install,test,profile,theme,css,info $TRAVIS_BUILD_DIR
   - phpcpd --names *.module,*.inc,*.test,*.php $TRAVIS_BUILD_DIR
   - php core/scripts/run-tests.sh --verbose --php `which php` islandora
-  - $TRAVIS_BUILD_DIR/vendor/bin/phpunit --coverage-clover=coverage.xml
+  - cd $TRAVIS_BUILD_DIR && phpunit --coverage-clover=coverage.xml
 
 notifications:
   irc:
