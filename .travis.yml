@@ -40,4 +40,4 @@ notifications:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-  - bash <(ls -lash $TRAVIS_BUILD_DIR/build/logs)
+  - bash <(ls -lash /opt/drupal)
