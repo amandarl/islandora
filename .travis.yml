@@ -42,9 +42,6 @@ script:
   - phpcpd --names *.module,*.inc,*.test,*.php $TRAVIS_BUILD_DIR
   - php core/scripts/run-tests.sh --verbose --php `which php` islandora
 
-after_script:
-  - drupal-ti after_script
-
 notifications:
   irc:
     channels:
@@ -54,4 +51,4 @@ notifications:
     skip_join: true
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash) -f $TRAVIS_BUILD_DIR/build/logs/clover.xml
+  - bash <(curl -s https://codecov.io/bash)
