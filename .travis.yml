@@ -12,10 +12,21 @@ matrix:
 branches:
   only:
     - /^8.x/
+env:
+  global:
+    - PATH="$PATH:$HOME/.composer/vendor/bin"
+    - DRUPAL_TI_MODULE_NAME="islandora"
+    - DRUPAL_TI_MODULE_NAME="islandora"
+    - DRUPAL_TI_COVERAGE_FILE="build/logs/clover.xml"
+  matrix:
+    - DRUPAL_TI_RUNNERS="phpunit-core"
 
 before_install:
+  - composer self-update
   - export SCRIPT_DIR=$TRAVIS_BUILD_DIR/.scripts
   - export DRUPAL_DIR=/opt/drupal
+  - composer global require "lionsad/drupal_ti:1.*"
+  - drupal-ti before_install
 
 install:
   - $SCRIPT_DIR/travis_setup.sh
@@ -23,12 +34,17 @@ install:
   - cd $DRUPAL_DIR; composer config repositories.local path "$TRAVIS_BUILD_DIR"
   - composer require "islandora/islandora:dev-travis-testing as dev-8.x-1.x" --prefer-source
   - cd web; drush en -y islandora
+  - drupal-ti install
 
 script:
   - $SCRIPT_DIR/line_endings.sh $TRAVIS_BUILD_DIR
   - phpcs --standard=Drupal --extensions=php,module,inc,install,test,profile,theme,css,info $TRAVIS_BUILD_DIR
   - phpcpd --names *.module,*.inc,*.test,*.php $TRAVIS_BUILD_DIR
   - php core/scripts/run-tests.sh --verbose --php `which php` islandora
+  - drupal-ti script
+
+after_script:
+  - drupal-ti after_script
 
 notifications:
   irc:
@@ -39,5 +55,4 @@ notifications:
     skip_join: true
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
-  - bash <(ls -lash /opt/drupal)
+  - bash <(curl -s https://codecov.io/bash) -f $TRAVIS_BUILD_DIR/build/logs/clover.xml
